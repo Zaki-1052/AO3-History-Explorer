@@ -1,0 +1,88 @@
+// src/utils/exportUtils.ts
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { WorkData } from '../types/AO3Types';
+
+// Export works data to Excel
+export const exportToExcel = (works: WorkData[], filename = 'ao3_history.xlsx'): void => {
+  // Transform data to match the format of the original script
+  const exportData = works.map(work => ({
+    'Title': work.title || 'Unknown',
+    'Author': work.author || 'Unknown',
+    'Fandoms': work.fandoms.map(f => f.name).join(', ') || 'Unknown',
+    'Word Count': work.stats.wordCount || 0,
+    'Last Visited': work.userStats.lastVisited || 'Unknown',
+    'Visits': work.userStats.visits || 0,
+    'Rating': work.rating || 'Unknown',
+    'Warnings': work.tags.warnings.map(w => w.name).join(', ') || 'Unknown',
+    'Category': work.category || 'Unknown',
+    'Status': work.completion || 'Unknown',
+    'Kudos': work.stats.kudos || 0,
+    'Comments': work.stats.comments || 0,
+    'Bookmarks': work.stats.bookmarks || 0,
+    'Hits': work.stats.hits || 0,
+    'Work ID': work.id || 'Unknown',
+    'Relationships': work.tags.relationships.map(r => r.name).join(', ') || '',
+    'Characters': work.tags.characters.map(c => c.name).join(', ') || '',
+    'Additional Tags': work.tags.freeforms.map(t => t.name).join(', ') || '',
+    'Language': work.stats.language || 'Unknown',
+    'Published': work.stats.publishDate || 'Unknown',
+    'Chapters': work.stats.chapters || '?/?'
+  }));
+
+  // Create worksheet
+  const worksheet = XLSX.utils.json_to_sheet(exportData);
+  
+  // Create workbook and add the worksheet
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'AO3 History');
+  
+  // Generate Excel file and trigger download
+  XLSX.writeFile(workbook, filename);
+};
+
+// Export works data to JSON
+export const exportToJSON = (works: WorkData[], filename = 'ao3_history.json'): void => {
+  const jsonString = JSON.stringify(works, null, 2);
+  const blob = new Blob([jsonString], { type: 'application/json' });
+  saveAs(blob, filename);
+};
+
+// Export works data to CSV
+export const exportToCSV = (works: WorkData[], filename = 'ao3_history.csv'): void => {
+  // Transform data to match the format of the original script
+  const exportData = works.map(work => ({
+    'Title': work.title || 'Unknown',
+    'Author': work.author || 'Unknown',
+    'Fandoms': work.fandoms.map(f => f.name).join(', ') || 'Unknown',
+    'Word Count': work.stats.wordCount || 0,
+    'Last Visited': work.userStats.lastVisited || 'Unknown',
+    'Visits': work.userStats.visits || 0,
+    'Rating': work.rating || 'Unknown',
+    'Warnings': work.tags.warnings.map(w => w.name).join(', ') || 'Unknown',
+    'Category': work.category || 'Unknown',
+    'Status': work.completion || 'Unknown',
+    'Kudos': work.stats.kudos || 0,
+    'Comments': work.stats.comments || 0,
+    'Bookmarks': work.stats.bookmarks || 0,
+    'Hits': work.stats.hits || 0,
+    'Work ID': work.id || 'Unknown'
+  }));
+
+  // Convert to CSV with headers
+  const headers = Object.keys(exportData[0]).join(',');
+  const rows = exportData.map(row => 
+    Object.values(row).map(value => 
+      // Handle commas and quotes in CSV data
+      typeof value === 'string' && (value.includes(',') || value.includes('"')) 
+        ? `"${value.replace(/"/g, '""')}"` 
+        : value
+    ).join(',')
+  );
+  
+  const csvContent = [headers, ...rows].join('\n');
+  
+  // Create blob and trigger download
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  saveAs(blob, filename);
+};

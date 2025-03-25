@@ -1,0 +1,57 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-ao3-beige text-ao3-darkgray dark:bg-ao3-charcoal dark:text-ao3-lightgray;
+    font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Verdana', 'Helvetica', 'sans-serif';
+  }
+}
+
+@layer components {
+  .ao3-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .ao3-card {
+    @apply bg-white dark:bg-ao3-charcoal border border-ao3-mediumgray dark:border-gray-600 rounded-md shadow-sm;
+  }
+  
+  .ao3-button-primary {
+    @apply px-4 py-2 bg-ao3-red hover:bg-ao3-darkred text-white rounded-md transition-colors;
+  }
+  
+  .ao3-button-secondary {
+    @apply px-4 py-2 bg-white dark:bg-gray-700 border border-ao3-mediumgray dark:border-gray-600 
+           text-ao3-darkgray dark:text-ao3-lightgray hover:bg-gray-50 dark:hover:bg-gray-600 
+           rounded-md transition-colors;
+  }
+  
+  .ao3-tab {
+    @apply px-3 py-2 text-ao3-darkgray dark:text-ao3-lightgray border-b-2 border-transparent;
+  }
+  
+  .ao3-tab-active {
+    @apply border-ao3-red text-ao3-red dark:text-white font-medium;
+  }
+}
+
+/* Icon size classes */
+.icon-sm {
+  @apply h-4 w-4;
+}
+
+.icon-md {
+  @apply h-5 w-5;
+}
+
+.icon-lg {
+  @apply h-6 w-6;
+}
+
+/* Chart container fix */
+.chart-container {
+  @apply h-72 w-full relative;
+}
