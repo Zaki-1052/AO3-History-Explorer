@@ -21,15 +21,15 @@ export const WorksTable: React.FC = () => {
     setCurrentPage(1);
   }, [filterOptions, searchTerm]);
   
-  // Define table columns
+  // Define table columns with updated column spans
   const columns = [
-    { key: 'title', label: 'Title', sortable: true, width: 'w-1/4' },
-    { key: 'author', label: 'Author', sortable: true, width: 'w-1/6' },
-    { key: 'stats.wordCount', label: 'Words', sortable: true, width: 'w-20' },
-    { key: 'userStats.visits', label: 'Visits', sortable: true, width: 'w-16' },
-    { key: 'userStats.lastVisited', label: 'Last Visited', sortable: true, width: 'w-32' },
-    { key: 'rating', label: 'Rating', sortable: true, width: 'w-24' },
-    { key: 'completion', label: 'Status', sortable: true, width: 'w-24' }
+    { key: 'title', label: 'Title', sortable: true, span: 3 },
+    { key: 'author', label: 'Author', sortable: true, span: 2 },
+    { key: 'stats.wordCount', label: 'Words', sortable: true, span: 1 },
+    { key: 'userStats.visits', label: 'Visits', sortable: true, span: 1 },
+    { key: 'userStats.lastVisited', label: 'Last Visited', sortable: true, span: 1 },
+    { key: 'rating', label: 'Rating', sortable: true, span: 1 },
+    { key: 'completion', label: 'Status', sortable: true, span: 1 }
   ];
 
   // Handle sorting
@@ -166,34 +166,52 @@ export const WorksTable: React.FC = () => {
     
     return (
       <div style={style} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
-        <div className="grid grid-cols-7 h-full">
-          {/* Title + Fandom */}
-          <div className="px-4 py-3 col-span-1">
-            <div className="text-sm font-medium text-gray-900 dark:text-white truncate max-w-xs">
+        <div className="grid grid-cols-10 h-full">
+          {/* Title + Fandom - now with tooltip */}
+          <div className="px-4 py-3 col-span-3 relative group">
+            <div 
+              className="text-sm font-medium text-gray-900 dark:text-white truncate max-w-full"
+              title={`${work.title}`} // Simple HTML tooltip
+            >
               {work.title}
             </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-xs">
+            
+            {/* Custom tooltip that appears on hover */}
+            <div className="opacity-0 bg-black text-white text-xs rounded py-1 px-2 absolute z-10 group-hover:opacity-100 transition-opacity duration-300 -top-2 left-4 transform -translate-y-full w-auto max-w-xs pointer-events-none">
+              {work.title}
+            </div>
+            
+            <div 
+              className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-full"
+              title={work.fandoms.map(f => f.name).join(', ')}
+            >
               {work.fandoms.map(f => f.name).join(', ')}
             </div>
           </div>
 
-          {/* Author */}
-          <div className="px-4 py-3 col-span-1">
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+          {/* Author - with tooltip for long names */}
+          <div className="px-4 py-3 col-span-2 relative group">
+            <div 
+              className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-full"
+              title={work.author}
+            >
+              {work.author}
+            </div>
+            <div className="opacity-0 bg-black text-white text-xs rounded py-1 px-2 absolute z-10 group-hover:opacity-100 transition-opacity duration-300 -top-2 left-4 transform -translate-y-full w-auto max-w-xs pointer-events-none">
               {work.author}
             </div>
           </div>
 
-          {/* Word Count */}
+          {/* Word Count - narrower */}
           <div className="px-4 py-3 col-span-1">
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="text-sm text-gray-500 dark:text-gray-400 text-right">
               {work.stats.wordCount.toLocaleString()}
             </div>
           </div>
 
-          {/* Visits */}
+          {/* Visits - narrower */}
           <div className="px-4 py-3 col-span-1">
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="text-sm text-gray-500 dark:text-gray-400 text-right">
               {work.userStats.visits}
             </div>
           </div>
@@ -205,7 +223,7 @@ export const WorksTable: React.FC = () => {
             </div>
           </div>
 
-          {/* Rating */}
+          {/* Rating - narrower */}
           <div className="px-4 py-3 col-span-1">
             <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
               ${work.rating.includes('Explicit') 
@@ -220,7 +238,7 @@ export const WorksTable: React.FC = () => {
             </span>
           </div>
 
-          {/* Status */}
+          {/* Status - narrower */}
           <div className="px-4 py-3 col-span-1">
             <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
               ${work.completion.includes('Complete') 
@@ -291,31 +309,162 @@ export const WorksTable: React.FC = () => {
       <div className="overflow-hidden">
         <div className="overflow-x-auto">
           <div className="min-w-full">
+            {/* Updated header with grid-cols-12 */}
             <div className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-700">
-              <div className="grid grid-cols-7">
-                {columns.map((column) => (
-                  <div
-                    key={column.key}
-                    onClick={() => column.sortable ? handleSort(column.key) : undefined}
-                    className={`
-                      px-4 py-3 text-left text-xs font-medium uppercase tracking-wider
-                      ${column.sortable ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600' : ''}
-                      ${sortConfig.key === column.key 
-                        ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
-                        : 'text-gray-500 dark:text-gray-300'}
-                    `}
-                  >
-                    <div className="flex items-center space-x-1">
-                      <span>{column.label}</span>
-                      {sortConfig.key === column.key && (
-                        <Icon 
-                          icon={sortConfig.direction === 'asc' ? 'sort-asc' : 'sort-desc'} 
-                          size="sm"
-                        />
-                      )}
-                    </div>
+              <div className="grid grid-cols-10">
+                {/* Title header - wider (col-span-4) */}
+                <div
+                  onClick={() => handleSort('title')}
+                  className={`
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-3
+                    cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
+                    ${sortConfig.key === 'title' 
+                      ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
+                      : 'text-gray-500 dark:text-gray-300'}
+                  `}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span>Title</span>
+                    {sortConfig.key === 'title' && (
+                      <Icon 
+                        icon={sortConfig.direction === 'asc' ? 'sort-asc' : 'sort-desc'} 
+                        size="sm"
+                      />
+                    )}
                   </div>
-                ))}
+                </div>
+
+                {/* Author header - medium width (col-span-2) */}
+                <div
+                  onClick={() => handleSort('author')}
+                  className={`
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-2
+                    cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
+                    ${sortConfig.key === 'author' 
+                      ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
+                      : 'text-gray-500 dark:text-gray-300'}
+                  `}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span>Author</span>
+                    {sortConfig.key === 'author' && (
+                      <Icon 
+                        icon={sortConfig.direction === 'asc' ? 'sort-asc' : 'sort-desc'} 
+                        size="sm"
+                      />
+                    )}
+                  </div>
+                </div>
+
+                {/* Words header - narrow (col-span-1) */}
+                <div
+                  onClick={() => handleSort('stats.wordCount')}
+                  className={`
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-1
+                    cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
+                    ${sortConfig.key === 'stats.wordCount' 
+                      ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
+                      : 'text-gray-500 dark:text-gray-300'}
+                  `}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span>Words</span>
+                    {sortConfig.key === 'stats.wordCount' && (
+                      <Icon 
+                        icon={sortConfig.direction === 'asc' ? 'sort-asc' : 'sort-desc'} 
+                        size="sm"
+                      />
+                    )}
+                  </div>
+                </div>
+
+                {/* Visits header - narrow (col-span-1) */}
+                <div
+                  onClick={() => handleSort('userStats.visits')}
+                  className={`
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-1
+                    cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
+                    ${sortConfig.key === 'userStats.visits' 
+                      ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
+                      : 'text-gray-500 dark:text-gray-300'}
+                  `}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span>Visits</span>
+                    {sortConfig.key === 'userStats.visits' && (
+                      <Icon 
+                        icon={sortConfig.direction === 'asc' ? 'sort-asc' : 'sort-desc'} 
+                        size="sm"
+                      />
+                    )}
+                  </div>
+                </div>
+
+                {/* Last Visited header - medium width (col-span-2) */}
+                <div
+                  onClick={() => handleSort('userStats.lastVisited')}
+                  className={`
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-1
+                    cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
+                    ${sortConfig.key === 'userStats.lastVisited' 
+                      ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
+                      : 'text-gray-500 dark:text-gray-300'}
+                  `}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span>Last Visited</span>
+                    {sortConfig.key === 'userStats.lastVisited' && (
+                      <Icon 
+                        icon={sortConfig.direction === 'asc' ? 'sort-asc' : 'sort-desc'} 
+                        size="sm"
+                      />
+                    )}
+                  </div>
+                </div>
+
+                {/* Rating header - narrow (col-span-1) */}
+                <div
+                  onClick={() => handleSort('rating')}
+                  className={`
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-1
+                    cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
+                    ${sortConfig.key === 'rating' 
+                      ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
+                      : 'text-gray-500 dark:text-gray-300'}
+                  `}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span>Rating</span>
+                    {sortConfig.key === 'rating' && (
+                      <Icon 
+                        icon={sortConfig.direction === 'asc' ? 'sort-asc' : 'sort-desc'} 
+                        size="sm"
+                      />
+                    )}
+                  </div>
+                </div>
+
+                {/* Status header - narrow (col-span-1) */}
+                <div
+                  onClick={() => handleSort('completion')}
+                  className={`
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-1
+                    cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
+                    ${sortConfig.key === 'completion' 
+                      ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
+                      : 'text-gray-500 dark:text-gray-300'}
+                  `}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span>Status</span>
+                    {sortConfig.key === 'completion' && (
+                      <Icon 
+                        icon={sortConfig.direction === 'asc' ? 'sort-asc' : 'sort-desc'} 
+                        size="sm"
+                      />
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
             

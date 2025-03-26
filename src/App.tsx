@@ -26,7 +26,7 @@ function AppContent() {
       <TabBar />
       
       <main className="flex-grow py-6">
-        <Container>
+      <Container className={activeTab === 'table' ? 'max-w-screen-2xl' : ''}>
           {isLoading && (
             <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-md mb-6 text-blue-700 dark:text-blue-300">
               <p>Loading your data...</p>
