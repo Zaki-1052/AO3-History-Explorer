@@ -68,6 +68,53 @@ export const FileUpload: React.FC = () => {
 
   return (
     <Card title="Import Your Reading History">
+      <div className="mb-3 text-gray-700 dark:text-gray-300 bg-blue-50 dark:bg-blue-900/20 p-3.5 rounded-md border border-blue-200 dark:border-blue-800">
+        <p className="font-medium text-ao3-red dark:text-blue-300 mb-1.5 text-sm">How to Get Your Reading History</p>
+        <p className="mb-1.5 text-sm">
+          To use this app, you need to first export your AO3 history using one of these options:
+        </p>
+        <ol className="list-decimal list-inside space-y-1 mb-2 ml-1 text-sm">
+          <li>Install the <a 
+            href="https://addons.mozilla.org/en-US/firefox/addon/ao3-history-exporter/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-ao3-red dark:text-blue-300 hover:underline font-medium"
+          >
+            AO3 History Exporter
+          </a> browser extension for Firefox</li>
+          <li>Go to your AO3 reading history page</li>
+          <li>Click the "Export Reading History" button to export your data</li>
+        </ol>
+        <p className="mt-2 mb-1 font-medium text-sm underline decoration-1 underline-offset-2">Alternative Installation:</p>
+        <p className="text-sm">For Chrome, you can install as a <a 
+          href="https://github.com/Zaki-1052/AO3-History-Exporter#installation" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-ao3-red dark:text-blue-300 hover:underline font-medium"
+        >
+          TamperMonkey script
+        </a> from the <a 
+          href="https://github.com/Zaki-1052/AO3-History-Exporter/blob/main/ao3-history-exporter.js" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-ao3-red dark:text-blue-300 hover:underline font-medium"
+        >
+          GitHub repository
+        </a>.</p>
+        <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
+          Note: If you encounter rate limits while exporting, please pause the export and reference the 
+          <a 
+            href="https://github.com/Zaki-1052/AO3-History-Exporter#usage" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hover:underline mx-1 dark:text-blue-300"
+          >
+            documentation
+          </a>
+          for troubleshooting.
+        </p>
+      </div>
+
       <div
         className={`
           mt-2 border-2 border-dashed rounded-lg p-8 text-center cursor-pointer
