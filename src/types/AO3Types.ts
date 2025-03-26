@@ -105,4 +105,12 @@ export interface FilterOptions {
       name: string;
       count: number;
     }[];
+    topRelationships: {
+      name: string;
+      count: number;
+    }[];
+    topFreeformTags: {
+      name: string;
+      count: number;
+    }[];
   }

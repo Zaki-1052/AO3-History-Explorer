@@ -155,7 +155,9 @@ export const generateStats = (works: WorkData[]): StatSummary => {
       totalVisits: 0,
       mostVisitedWork: { title: '', visits: 0 },
       topAuthors: [],
-      topFandoms: []
+      topFandoms: [],
+      topRelationships: [],
+      topFreeformTags: []
     };
   }
   
@@ -166,6 +168,8 @@ export const generateStats = (works: WorkData[]): StatSummary => {
   // Count unique authors
   const authorCounts: Record<string, number> = {};
   const fandomCounts: Record<string, number> = {};
+  const relationshipCounts: Record<string, number> = {};
+  const freeformTagCounts: Record<string, number> = {};
   
   works.forEach(work => {
     // Author counts
@@ -174,6 +178,16 @@ export const generateStats = (works: WorkData[]): StatSummary => {
     // Fandom counts
     work.fandoms.forEach(fandom => {
       fandomCounts[fandom.name] = (fandomCounts[fandom.name] || 0) + 1;
+    });
+    
+    // Relationship counts
+    work.tags.relationships.forEach(relationship => {
+      relationshipCounts[relationship.name] = (relationshipCounts[relationship.name] || 0) + 1;
+    });
+    
+    // Freeform tag counts
+    work.tags.freeforms.forEach(tag => {
+      freeformTagCounts[tag.name] = (freeformTagCounts[tag.name] || 0) + 1;
     });
   });
   
@@ -193,6 +207,18 @@ export const generateStats = (works: WorkData[]): StatSummary => {
     .map(([name, count]) => ({ name, count }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 30);
+    
+  // Convert relationships map to sorted array
+  const topRelationships = Object.entries(relationshipCounts)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 34);
+    
+  // Convert freeform tags map to sorted array
+  const topFreeformTags = Object.entries(freeformTagCounts)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 34);
   
   return {
     totalWorks: works.length,
@@ -205,7 +231,9 @@ export const generateStats = (works: WorkData[]): StatSummary => {
       visits: mostVisitedWork.userStats.visits
     },
     topAuthors,
-    topFandoms
+    topFandoms,
+    topRelationships,
+    topFreeformTags
   };
 };
 

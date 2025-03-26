@@ -86,6 +86,50 @@ export const StatisticsPanel: React.FC = () => {
           </ul>
         </Card>
       </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card title="Top Relationships">
+          <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+            {stats.topRelationships.map((relationship, index) => (
+              <li key={relationship.name} className="py-3 flex justify-between items-center">
+                <div className="flex items-center">
+                  <span className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 
+                                   rounded-full w-6 h-6 flex items-center justify-center text-sm mr-3">
+                    {index + 1}
+                  </span>
+                  <span className="text-ao3-darkgray dark:text-ao3-lightgray truncate max-w-xs">
+                    {relationship.name}
+                  </span>
+                </div>
+                <span className="text-gray-500 dark:text-gray-400 font-medium">
+                  {relationship.count} {relationship.count === 1 ? 'work' : 'works'}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+        
+        <Card title="Top Tags">
+          <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+            {stats.topFreeformTags.map((tag, index) => (
+              <li key={tag.name} className="py-3 flex justify-between items-center">
+                <div className="flex items-center">
+                  <span className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 
+                                   rounded-full w-6 h-6 flex items-center justify-center text-sm mr-3">
+                    {index + 1}
+                  </span>
+                  <span className="text-ao3-darkgray dark:text-ao3-lightgray truncate max-w-xs">
+                    {tag.name}
+                  </span>
+                </div>
+                <span className="text-gray-500 dark:text-gray-400 font-medium">
+                  {tag.count} {tag.count === 1 ? 'work' : 'works'}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      </div>
     </div>
   );
 };
