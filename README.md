@@ -5,7 +5,7 @@ AO3 History Explorer is a comprehensive web application designed to help Archive
 ![AO3 History Explorer Screenshot](ao3-history-explorer.png)
 
 **Important**: You *must* export your data with the linked extension above before using this web app.
-- Please follow the instructions in that [ReadMe](https://github.com/Zaki-1052/AO3-History-Exporter/blob/main/README.md) to install as a TaperMonkey Script or extension first.
+- Please follow the instructions in that [ReadMe](https://github.com/Zaki-1052/AO3-History-Exporter) to install as a TaperMonkey Script or extension first.
 
 ## Table of Contents
 
