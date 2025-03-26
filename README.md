@@ -2,7 +2,7 @@
 
 AO3 History Explorer is a comprehensive web application designed to help Archive of Our Own (AO3) users analyze and export their reading history. The application works together with the [AO3-History-Exporter](https://github.com/yourusername/AO3-History-Exporter) browser extension to provide a seamless experience for exploring your AO3 reading habits.
 
-![AO3 History Explorer Screenshot](screenshot.png)
+![AO3 History Explorer Screenshot](ao3-history-explorer.png)
 
 ## Table of Contents
 
@@ -220,13 +220,11 @@ Contributions are welcome! To contribute:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
-- [Archive of Our Own (AO3)](https://archiveofourown.org/) for providing the reading history functionality
-- All contributors to the open-source libraries used in this project
-- The AO3 user community for inspiration and feedback
+- [Archive of Our Own (AO3)](https://archiveofourown.org/)
 
 ---
 
