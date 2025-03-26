@@ -186,13 +186,13 @@ export const generateStats = (works: WorkData[]): StatSummary => {
   const topAuthors = Object.entries(authorCounts)
     .map(([name, count]) => ({ name, count }))
     .sort((a, b) => b.count - a.count)
-    .slice(0, 5);
+    .slice(0, 33);
   
   // Convert fandoms map to sorted array
   const topFandoms = Object.entries(fandomCounts)
     .map(([name, count]) => ({ name, count }))
     .sort((a, b) => b.count - a.count)
-    .slice(0, 5);
+    .slice(0, 30);
   
   return {
     totalWorks: works.length,
