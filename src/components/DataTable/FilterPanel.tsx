@@ -197,7 +197,7 @@ export const FilterPanel: React.FC = () => {
                 value=""
               >
                 <option value="" disabled>Select a category...</option>
-                {categoryOptions.map(category => (
+                {categoryOptions.map((category: string) => (
                   <option key={category} value={category}>{category}</option>
                 ))}
               </select>

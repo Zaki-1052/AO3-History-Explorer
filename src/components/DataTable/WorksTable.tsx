@@ -2,11 +2,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { FixedSizeList as List } from 'react-window';
 import { Card } from '../common/Card';
-import { Button } from '../common/Button';
+//import { Button } from '../common/Button';
 import { Icon } from '../common/Icon';
 import { useData } from '../../context/DataContext';
 import { sortWorks, filterWorks } from '../../utils/dataProcessing';
-import { TableHeader } from './TableHeader';
+//import { TableHeader } from './TableHeader';
 
 // Row height for virtualization
 const ROW_HEIGHT = 72; 

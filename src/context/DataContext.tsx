@@ -22,6 +22,7 @@ interface DataContextType {
     authors: string[];
     ratings: string[];
     tags: string[];
+    categories: string[]; // Add this
   };
 }
 
@@ -50,7 +51,8 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     fandoms: [] as string[],
     authors: [] as string[],
     ratings: [] as string[],
-    tags: [] as string[]
+    tags: [] as string[],
+    categories: [] as string[] // Add this line
   });
 
   // Extract available filters when works change

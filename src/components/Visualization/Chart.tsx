@@ -67,7 +67,7 @@ export const Chart: React.FC<ChartProps> = ({
           color: textColor,
           font: {
             size: 16,
-            weight: 'bold'
+            weight: 'bold' as const
           }
         },
         tooltip: {
