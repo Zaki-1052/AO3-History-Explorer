@@ -1,54 +1,49 @@
-# React + TypeScript + Vite
+### Key Components
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- **URLImport**: Processes data passed via URL from the browser extension
+- **FileUpload**: Handles direct JSON file uploads
+- **FilterPanel**: Manages all filtering options
+- **WorksTable**: Displays the reading history with sorting and pagination
+- **StatisticsPanel**: Shows summary statistics and analysis
+- **ChartPanel**: Displays various visualizations of the data
+- **ExportButtons**: Provides export functionality in different formats
 
-Currently, two official plugins are available:
+### Data Flow
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Data is imported via URL parameter or file upload
+2. The DataContext manages the application state
+3. Filtering and sorting are applied in memory
+4. Components render views of the filtered/sorted data
+5. Export functions format and download the data in the chosen format
 
-## Expanding the ESLint configuration
+## Contributing
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Contributions are welcome! To contribute:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Guidelines
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Keep privacy in mind - all data processing should happen client-side
+- Maintain performance with large datasets (some users have 6000+ works)
+- Follow the existing code style and patterns
+- Add tests for new functionality
+- Update documentation as needed
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [Archive of Our Own (AO3)](https://archiveofourown.org/) for providing the reading history functionality
+- All contributors to the open-source libraries used in this project
+- The AO3 user community for inspiration and feedback
+
+---
+
+_Note: AO3 History Explorer is not affiliated with or endorsed by Archive of Our Own or the Organization for Transformative Works._
