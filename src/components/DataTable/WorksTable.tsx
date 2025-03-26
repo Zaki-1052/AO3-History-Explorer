@@ -22,6 +22,7 @@ export const WorksTable: React.FC = () => {
   }, [filterOptions, searchTerm]);
   
   // Define table columns with updated column spans
+  /*
   const columns = [
     { key: 'title', label: 'Title', sortable: true, span: 3 },
     { key: 'author', label: 'Author', sortable: true, span: 2 },
@@ -31,6 +32,7 @@ export const WorksTable: React.FC = () => {
     { key: 'rating', label: 'Rating', sortable: true, span: 1 },
     { key: 'completion', label: 'Status', sortable: true, span: 1 }
   ];
+  */
 
   // Handle sorting
   const handleSort = (key: string) => {
