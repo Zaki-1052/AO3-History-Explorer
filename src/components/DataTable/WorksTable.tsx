@@ -175,7 +175,18 @@ export const WorksTable: React.FC = () => {
               className="text-sm font-medium text-gray-900 dark:text-white truncate max-w-full"
               title={`${work.title}`} // Simple HTML tooltip
             >
-              {work.title}
+              {work.url ? (
+                <a 
+                  href={`https://archiveofourown.org${work.url}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-ao3-red dark:hover:text-ao3-red transition-colors"
+                >
+                  {work.title}
+                </a>
+              ) : (
+                work.title
+              )}
             </div>
             
             {/* Custom tooltip that appears on hover */}
@@ -197,7 +208,18 @@ export const WorksTable: React.FC = () => {
               className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-full"
               title={work.author}
             >
-              {work.author}
+              {work.authorUrl ? (
+                <a 
+                  href={`https://archiveofourown.org${work.authorUrl}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-ao3-red dark:hover:text-ao3-red transition-colors"
+                >
+                  {work.author}
+                </a>
+              ) : (
+                work.author
+              )}
             </div>
             <div className="opacity-0 bg-black text-white text-xs rounded py-1 px-2 absolute z-10 group-hover:opacity-100 transition-opacity duration-300 -top-2 left-4 transform -translate-y-full w-auto max-w-xs pointer-events-none">
               {work.author}
