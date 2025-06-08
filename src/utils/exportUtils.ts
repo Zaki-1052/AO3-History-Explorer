@@ -2,11 +2,27 @@
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { WorkData } from '../types/AO3Types';
+import { isDeletedWork } from './dataProcessing';
+
+// Transform deleted works to show consistent values with UI display
+const transformWorkForExport = (work: WorkData): WorkData => {
+  if (isDeletedWork(work)) {
+    return {
+      ...work,
+      title: "Deleted Work",
+      author: "Unknown"
+    };
+  }
+  return work;
+};
 
 // Export works data to Excel
 export const exportToExcel = (works: WorkData[], filename = 'ao3_history.xlsx'): void => {
+  // Transform deleted works to match UI display
+  const transformedWorks = works.map(transformWorkForExport);
+  
   // Transform data to match the format of the original script
-  const exportData = works.map(work => ({
+  const exportData = transformedWorks.map(work => ({
     'Title': work.title || 'Unknown',
     'Author': work.author || 'Unknown',
     'Fandoms': work.fandoms.map(f => f.name).join(', ') || 'Unknown',
@@ -43,15 +59,21 @@ export const exportToExcel = (works: WorkData[], filename = 'ao3_history.xlsx'):
 
 // Export works data to JSON
 export const exportToJSON = (works: WorkData[], filename = 'ao3_history.json'): void => {
-  const jsonString = JSON.stringify(works, null, 2);
+  // Transform deleted works to match UI display
+  const transformedWorks = works.map(transformWorkForExport);
+  
+  const jsonString = JSON.stringify(transformedWorks, null, 2);
   const blob = new Blob([jsonString], { type: 'application/json' });
   saveAs(blob, filename);
 };
 
 // Export works data to CSV
 export const exportToCSV = (works: WorkData[], filename = 'ao3_history.csv'): void => {
+  // Transform deleted works to match UI display
+  const transformedWorks = works.map(transformWorkForExport);
+  
   // Transform data to match the format of the original script
-  const exportData = works.map(work => ({
+  const exportData = transformedWorks.map(work => ({
     'Title': work.title || 'Unknown',
     'Author': work.author || 'Unknown',
     'Fandoms': work.fandoms.map(f => f.name).join(', ') || 'Unknown',
