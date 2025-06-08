@@ -2,7 +2,7 @@
 
 All notable changes to AO3 History Explorer since the last README update.
 
-## [Unreleased] - 2025-06-08
+## [Released] - 2025-06-08
 
 ### Added
 - **Updated Date Column**: Added a new "Updated" column to the works table showing when works were last updated
@@ -19,7 +19,7 @@ All notable changes to AO3 History Explorer since the last README update.
 ### Technical Improvements
 - **Tailwind Configuration**: Added custom 20-column grid template to `tailwind.config.cjs`
 - **Component Updates**: Enhanced `WorksTable.tsx` with clickable links and improved column layout
-- **Documentation**: Added `CLAUDE.md` file for development context and instructions
+- **Documentation**: Added `CHANGELOG.md` file for development context and instructions
 
 ---
 
