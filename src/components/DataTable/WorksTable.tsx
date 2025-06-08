@@ -5,7 +5,7 @@ import { Card } from '../common/Card';
 //import { Button } from '../common/Button';
 import { Icon } from '../common/Icon';
 import { useData } from '../../context/DataContext';
-import { sortWorks, filterWorks } from '../../utils/dataProcessing';
+import { sortWorks, filterWorks, isDeletedWork } from '../../utils/dataProcessing';
 //import { TableHeader } from './TableHeader';
 
 // Row height for virtualization
@@ -166,32 +166,40 @@ export const WorksTable: React.FC = () => {
     const work = paginatedWorks[index];
     if (!work) return null;
     
+    const isDeleted = isDeletedWork(work);
+    const displayTitle = isDeleted ? "Deleted Work" : work.title;
+    const displayAuthor = isDeleted ? "Unknown" : work.author;
+    
     return (
       <div style={style} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
         <div className="grid grid-cols-20 h-full">
           {/* Title + Fandom - now with tooltip */}
           <div className="px-4 py-3 col-span-5 relative group">
             <div 
-              className="text-sm font-medium text-gray-900 dark:text-white truncate max-w-full"
-              title={`${work.title}`} // Simple HTML tooltip
+              className={`text-sm font-medium truncate max-w-full ${
+                isDeleted 
+                  ? 'text-gray-400 dark:text-gray-500 italic' 
+                  : 'text-gray-900 dark:text-white'
+              }`}
+              title={displayTitle} // Simple HTML tooltip
             >
-              {work.url ? (
+              {!isDeleted && work.url ? (
                 <a 
                   href={`https://archiveofourown.org${work.url}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-ao3-red dark:hover:text-ao3-red transition-colors"
                 >
-                  {work.title}
+                  {displayTitle}
                 </a>
               ) : (
-                work.title
+                displayTitle
               )}
             </div>
             
             {/* Custom tooltip that appears on hover */}
             <div className="opacity-0 bg-black text-white text-xs rounded py-1 px-2 absolute z-10 group-hover:opacity-100 transition-opacity duration-300 -top-2 left-4 transform -translate-y-full w-auto max-w-xs pointer-events-none">
-              {work.title}
+              {displayTitle}
             </div>
             
             <div 
@@ -205,24 +213,28 @@ export const WorksTable: React.FC = () => {
           {/* Author - with tooltip for long names */}
           <div className="px-4 py-3 col-span-3 relative group">
             <div 
-              className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-full"
-              title={work.author}
+              className={`text-sm truncate max-w-full ${
+                isDeleted 
+                  ? 'text-gray-400 dark:text-gray-500 italic' 
+                  : 'text-gray-500 dark:text-gray-400'
+              }`}
+              title={displayAuthor}
             >
-              {work.authorUrl ? (
+              {!isDeleted && work.authorUrl ? (
                 <a 
                   href={`https://archiveofourown.org${work.authorUrl}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-ao3-red dark:hover:text-ao3-red transition-colors"
                 >
-                  {work.author}
+                  {displayAuthor}
                 </a>
               ) : (
-                work.author
+                displayAuthor
               )}
             </div>
             <div className="opacity-0 bg-black text-white text-xs rounded py-1 px-2 absolute z-10 group-hover:opacity-100 transition-opacity duration-300 -top-2 left-4 transform -translate-y-full w-auto max-w-xs pointer-events-none">
-              {work.author}
+              {displayAuthor}
             </div>
           </div>
 

@@ -1,6 +1,23 @@
 // src/utils/dataProcessing.ts
 import { WorkData, SortConfig, FilterOptions, StatSummary, ChartData } from '../types/AO3Types';
 
+// Detect deleted/unavailable works based on consistent patterns
+export const isDeletedWork = (work: WorkData): boolean => {
+  return (
+    work.id === "" &&
+    work.title === "Unknown Title" &&
+    work.author === "Anonymous" &&
+    work.url === null &&
+    work.authorUrl === null &&
+    work.fandoms.length === 0 &&
+    work.stats.wordCount === 0 &&
+    work.userStats.lastVisited === "Unknown" &&
+    work.rating === "Unknown" &&
+    work.category === "Unknown" &&
+    work.completion === "Unknown"
+  );
+};
+
 // Date field keys that need chronological sorting
 const DATE_FIELDS = new Set([
   'userStats.lastVisited',
@@ -179,7 +196,10 @@ export const filterWorks = (works: WorkData[], searchTerm: string, filterOptions
 
 // Generate statistics from works data
 export const generateStats = (works: WorkData[]): StatSummary => {
-  if (works.length === 0) {
+  // Filter out deleted works for accurate statistics
+  const validWorks = works.filter(work => !isDeletedWork(work));
+  
+  if (validWorks.length === 0) {
     return {
       totalWorks: 0,
       totalAuthors: 0,
@@ -195,8 +215,8 @@ export const generateStats = (works: WorkData[]): StatSummary => {
   }
   
   // Calculate total word count and visits
-  const totalWordCount = works.reduce((sum, work) => sum + work.stats.wordCount, 0);
-  const totalVisits = works.reduce((sum, work) => sum + work.userStats.visits, 0);
+  const totalWordCount = validWorks.reduce((sum, work) => sum + work.stats.wordCount, 0);
+  const totalVisits = validWorks.reduce((sum, work) => sum + work.userStats.visits, 0);
   
   // Count unique authors
   const authorCounts: Record<string, number> = {};
@@ -204,7 +224,7 @@ export const generateStats = (works: WorkData[]): StatSummary => {
   const relationshipCounts: Record<string, number> = {};
   const freeformTagCounts: Record<string, number> = {};
   
-  works.forEach(work => {
+  validWorks.forEach(work => {
     // Author counts
     authorCounts[work.author] = (authorCounts[work.author] || 0) + 1;
     
@@ -225,7 +245,7 @@ export const generateStats = (works: WorkData[]): StatSummary => {
   });
   
   // Most visited work
-  const mostVisitedWork = works.reduce((prev, curr) => {
+  const mostVisitedWork = validWorks.reduce((prev, curr) => {
     return prev.userStats.visits > curr.userStats.visits ? prev : curr;
   });
   
@@ -254,10 +274,10 @@ export const generateStats = (works: WorkData[]): StatSummary => {
     .slice(0, 34);
   
   return {
-    totalWorks: works.length,
+    totalWorks: validWorks.length,
     totalAuthors: Object.keys(authorCounts).length,
     totalWordCount,
-    averageWordCount: Math.round(totalWordCount / works.length),
+    averageWordCount: Math.round(totalWordCount / validWorks.length),
     totalVisits,
     mostVisitedWork: {
       title: mostVisitedWork.title,
@@ -272,7 +292,10 @@ export const generateStats = (works: WorkData[]): StatSummary => {
 
 // Generate chart data from works
 export const generateChartData = (works: WorkData[]): Record<string, ChartData> => {
-  if (works.length === 0) {
+  // Filter out deleted works for clean visualizations
+  const validWorks = works.filter(work => !isDeletedWork(work));
+  
+  if (validWorks.length === 0) {
     return {
       fandomDistribution: {
         labels: [],
@@ -311,7 +334,7 @@ export const generateChartData = (works: WorkData[]): Record<string, ChartData> 
   
   // Fandom distribution - count works by fandom
   const fandomCounts: Record<string, number> = {};
-  works.forEach(work => {
+  validWorks.forEach(work => {
     work.fandoms.forEach(fandom => {
       fandomCounts[fandom.name] = (fandomCounts[fandom.name] || 0) + 1;
     });
@@ -333,7 +356,7 @@ export const generateChartData = (works: WorkData[]): Record<string, ChartData> 
     '> 100K': 0
   };
   
-  works.forEach(work => {
+  validWorks.forEach(work => {
     const wordCount = work.stats.wordCount;
     if (wordCount < 1000) {
       wordCountRanges['< 1K']++;
@@ -354,7 +377,7 @@ export const generateChartData = (works: WorkData[]): Record<string, ChartData> 
   
   // Rating distribution
   const ratingCounts: Record<string, number> = {};
-  works.forEach(work => {
+  validWorks.forEach(work => {
     ratingCounts[work.rating] = (ratingCounts[work.rating] || 0) + 1;
   });
   
@@ -384,7 +407,7 @@ export const generateChartData = (works: WorkData[]): Record<string, ChartData> 
     'No Category': 0
   };
   
-  works.forEach(work => {
+  validWorks.forEach(work => {
     // Parse the category string to identify the base categories
     const categoryStr = work.category.trim();
     
@@ -483,12 +506,15 @@ export const generateChartData = (works: WorkData[]): Record<string, ChartData> 
 
 // Extract filter options from works
 export const extractFilterOptions = (works: WorkData[]) => {
+  // Filter out deleted works to clean up filter options
+  const validWorks = works.filter(work => !isDeletedWork(work));
+  
   const fandoms = new Set<string>();
   const authors = new Set<string>();
   const ratings = new Set<string>();
   const tags = new Set<string>();
   
-  works.forEach(work => {
+  validWorks.forEach(work => {
     // Collect fandoms
     work.fandoms.forEach(fandom => fandoms.add(fandom.name));
     
