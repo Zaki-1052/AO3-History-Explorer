@@ -10,6 +10,9 @@ All notable changes to AO3 History Explorer since the last README update.
 - **Enhanced Grid System**: Extended Tailwind configuration to support 20-column grid layout for finer control over table column widths
 - **Improved File Upload Instructions**: Added comprehensive instructions and guidance to the file upload component
 
+### Fixed
+- **Date Sorting Issue**: Fixed chronological sorting for "Last Visited" and "Last Updated" columns - dates now sort chronologically (2020 → 2025) instead of lexicographically ("02 Oct" before "06 Apr")
+
 ### Changed
 - **Table Layout Optimization**: Adjusted column widths for better title display while maintaining author column readability
 - **Grid Column Configuration**: Modified table to use a 20-column grid system (instead of 10) for more granular column width control
@@ -17,6 +20,7 @@ All notable changes to AO3 History Explorer since the last README update.
 - **Screenshot**: Updated application screenshot to reflect current interface
 
 ### Technical Improvements
+- **Date Processing**: Enhanced `sortWorks` function in `dataProcessing.ts` with intelligent date field detection and robust date parsing with error handling
 - **Tailwind Configuration**: Added custom 20-column grid template to `tailwind.config.cjs`
 - **Component Updates**: Enhanced `WorksTable.tsx` with clickable links and improved column layout
 - **Documentation**: Added `CHANGELOG.md` file for development context and instructions

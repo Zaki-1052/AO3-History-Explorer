@@ -1,6 +1,30 @@
 // src/utils/dataProcessing.ts
 import { WorkData, SortConfig, FilterOptions, StatSummary, ChartData } from '../types/AO3Types';
 
+// Date field keys that need chronological sorting
+const DATE_FIELDS = new Set([
+  'userStats.lastVisited',
+  'stats.publishDate'
+]);
+
+// Parse date string into Date object with fallback handling
+const parseDate = (dateString: string | undefined | null): Date => {
+  if (!dateString) return new Date(0); // Fallback to epoch for null/undefined
+  
+  try {
+    const parsed = new Date(dateString);
+    // Check if parsed date is valid
+    if (isNaN(parsed.getTime())) {
+      console.warn(`Invalid date format: ${dateString}`);
+      return new Date(0); // Fallback to epoch for invalid dates
+    }
+    return parsed;
+  } catch (error) {
+    console.warn(`Error parsing date: ${dateString}`, error);
+    return new Date(0); // Fallback to epoch on parsing error
+  }
+};
+
 // Get nested property from an object using string path
 export const getNestedProperty = (obj: any, path: string): any => {
   if (!obj) return undefined;
@@ -18,7 +42,7 @@ export const getNestedProperty = (obj: any, path: string): any => {
   return current;
 };
 
-// Sort works based on sort configuration
+// Sort works based on sort configuration with proper date handling
 export const sortWorks = (works: WorkData[], sortConfig: SortConfig): WorkData[] => {
   return [...works].sort((a, b) => {
     const aValue = getNestedProperty(a, sortConfig.key);
@@ -29,12 +53,21 @@ export const sortWorks = (works: WorkData[], sortConfig: SortConfig): WorkData[]
     if (aValue === undefined) return sortConfig.direction === 'asc' ? -1 : 1;
     if (bValue === undefined) return sortConfig.direction === 'asc' ? 1 : -1;
     
+    // Handle date fields specially for chronological sorting
+    if (DATE_FIELDS.has(sortConfig.key)) {
+      const aDate = parseDate(aValue as string);
+      const bDate = parseDate(bValue as string);
+      
+      const comparison = aDate.getTime() - bDate.getTime();
+      return sortConfig.direction === 'asc' ? comparison : -comparison;
+    }
+    
     // Handle numbers specially
     if (typeof aValue === 'number' && typeof bValue === 'number') {
       return sortConfig.direction === 'asc' ? aValue - bValue : bValue - aValue;
     }
     
-    // Handle strings
+    // Handle strings (non-date)
     const aString = String(aValue).toLowerCase();
     const bString = String(bValue).toLowerCase();
     
@@ -393,7 +426,7 @@ export const generateChartData = (works: WorkData[]): Record<string, ChartData> 
   
   // Filter out categories with zero counts
   const filteredCategories = Object.entries(categoryCountMap)
-    .filter(([_, count]) => count > 0)
+    .filter(([, count]) => count > 0)
     .sort((a, b) => b[1] - a[1]);
     
   // Category-specific colors
@@ -439,7 +472,7 @@ export const generateChartData = (works: WorkData[]): Record<string, ChartData> 
       labels: filteredCategories.map(([name]) => name),
       datasets: [{
         label: 'Work Categories',
-        data: filteredCategories.map(([_, count]) => count),
+        data: filteredCategories.map(([, count]) => count),
         backgroundColor: filteredCategories.map(([name]) => 
           categoryColors[name as keyof typeof categoryColors] || '#999999'
         )
