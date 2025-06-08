@@ -168,9 +168,9 @@ export const WorksTable: React.FC = () => {
     
     return (
       <div style={style} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
-        <div className="grid grid-cols-10 h-full">
+        <div className="grid grid-cols-20 h-full">
           {/* Title + Fandom - now with tooltip */}
-          <div className="px-4 py-3 col-span-3 relative group">
+          <div className="px-4 py-3 col-span-5 relative group">
             <div 
               className="text-sm font-medium text-gray-900 dark:text-white truncate max-w-full"
               title={`${work.title}`} // Simple HTML tooltip
@@ -203,7 +203,7 @@ export const WorksTable: React.FC = () => {
           </div>
 
           {/* Author - with tooltip for long names */}
-          <div className="px-4 py-3 col-span-2 relative group">
+          <div className="px-4 py-3 col-span-3 relative group">
             <div 
               className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-full"
               title={work.author}
@@ -227,28 +227,35 @@ export const WorksTable: React.FC = () => {
           </div>
 
           {/* Word Count - narrower */}
-          <div className="px-4 py-3 col-span-1">
+          <div className="px-4 py-3 col-span-2">
             <div className="text-sm text-gray-500 dark:text-gray-400 text-right">
               {work.stats.wordCount.toLocaleString()}
             </div>
           </div>
 
           {/* Visits - narrower */}
-          <div className="px-4 py-3 col-span-1">
+          <div className="px-4 py-3 col-span-2">
             <div className="text-sm text-gray-500 dark:text-gray-400 text-right">
               {work.userStats.visits}
             </div>
           </div>
 
           {/* Last Visited */}
-          <div className="px-4 py-3 col-span-1">
+          <div className="px-4 py-3 col-span-2">
             <div className="text-sm text-gray-500 dark:text-gray-400">
               {work.userStats.lastVisited}
             </div>
           </div>
 
+          {/* Updated */}
+          <div className="px-4 py-3 col-span-2">
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              {work.stats.publishDate}
+            </div>
+          </div>
+
           {/* Rating - narrower */}
-          <div className="px-4 py-3 col-span-1">
+          <div className="px-4 py-3 col-span-2">
             <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
               ${work.rating.includes('Explicit') 
                 ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' 
@@ -263,7 +270,7 @@ export const WorksTable: React.FC = () => {
           </div>
 
           {/* Status - narrower */}
-          <div className="px-4 py-3 col-span-1">
+          <div className="px-4 py-3 col-span-2">
             <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
               ${work.completion.includes('Complete') 
                 ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
@@ -335,12 +342,12 @@ export const WorksTable: React.FC = () => {
           <div className="min-w-full">
             {/* Updated header with grid-cols-12 */}
             <div className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-700">
-              <div className="grid grid-cols-10">
-                {/* Title header - wider (col-span-4) */}
+              <div className="grid grid-cols-20">
+                {/* Title header - reduced width (col-span-2) */}
                 <div
                   onClick={() => handleSort('title')}
                   className={`
-                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-3
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-5
                     cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
                     ${sortConfig.key === 'title' 
                       ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
@@ -362,7 +369,7 @@ export const WorksTable: React.FC = () => {
                 <div
                   onClick={() => handleSort('author')}
                   className={`
-                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-2
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-3
                     cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
                     ${sortConfig.key === 'author' 
                       ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
@@ -384,7 +391,7 @@ export const WorksTable: React.FC = () => {
                 <div
                   onClick={() => handleSort('stats.wordCount')}
                   className={`
-                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-1
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-2
                     cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
                     ${sortConfig.key === 'stats.wordCount' 
                       ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
@@ -406,7 +413,7 @@ export const WorksTable: React.FC = () => {
                 <div
                   onClick={() => handleSort('userStats.visits')}
                   className={`
-                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-1
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-2
                     cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
                     ${sortConfig.key === 'userStats.visits' 
                       ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
@@ -428,7 +435,7 @@ export const WorksTable: React.FC = () => {
                 <div
                   onClick={() => handleSort('userStats.lastVisited')}
                   className={`
-                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-1
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-2
                     cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
                     ${sortConfig.key === 'userStats.lastVisited' 
                       ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
@@ -446,11 +453,33 @@ export const WorksTable: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Updated header - narrow (col-span-1) */}
+                <div
+                  onClick={() => handleSort('stats.publishDate')}
+                  className={`
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-2
+                    cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
+                    ${sortConfig.key === 'stats.publishDate' 
+                      ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
+                      : 'text-gray-500 dark:text-gray-300'}
+                  `}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span>Last Updated</span>
+                    {sortConfig.key === 'stats.publishDate' && (
+                      <Icon 
+                        icon={sortConfig.direction === 'asc' ? 'sort-asc' : 'sort-desc'} 
+                        size="sm"
+                      />
+                    )}
+                  </div>
+                </div>
+
                 {/* Rating header - narrow (col-span-1) */}
                 <div
                   onClick={() => handleSort('rating')}
                   className={`
-                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-1
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-2
                     cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
                     ${sortConfig.key === 'rating' 
                       ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 
@@ -472,7 +501,7 @@ export const WorksTable: React.FC = () => {
                 <div
                   onClick={() => handleSort('completion')}
                   className={`
-                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-1
+                    px-4 py-3 text-left text-xs font-medium uppercase tracking-wider col-span-2
                     cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600
                     ${sortConfig.key === 'completion' 
                       ? 'text-ao3-red dark:text-white bg-gray-100 dark:bg-gray-600' 

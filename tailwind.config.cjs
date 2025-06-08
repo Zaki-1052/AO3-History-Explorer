@@ -19,6 +19,10 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Lucida Grande', 'Lucida Sans Unicode', 'Verdana', 'Helvetica', 'sans-serif'],
+      },
+      gridTemplateColumns: {
+        // Custom 20 column grid for finer control
+        '20': 'repeat(20, minmax(0, 1fr))',
       }
     },
   },
