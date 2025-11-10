@@ -71,7 +71,7 @@ export const exportToJSON = (works: WorkData[], filename = 'ao3_history.json'): 
 export const exportToCSV = (works: WorkData[], filename = 'ao3_history.csv'): void => {
   // Transform deleted works to match UI display
   const transformedWorks = works.map(transformWorkForExport);
-  
+
   // Transform data to match the format of the original script
   const exportData = transformedWorks.map(work => ({
     'Title': work.title || 'Unknown',
@@ -91,19 +91,45 @@ export const exportToCSV = (works: WorkData[], filename = 'ao3_history.csv'): vo
     'Work ID': work.id || 'Unknown'
   }));
 
+  // Handle empty data case
+  if (exportData.length === 0) {
+    // Create an empty CSV with just headers
+    const emptyRow = {
+      'Title': '',
+      'Author': '',
+      'Fandoms': '',
+      'Word Count': '',
+      'Last Visited': '',
+      'Visits': '',
+      'Rating': '',
+      'Warnings': '',
+      'Category': '',
+      'Status': '',
+      'Kudos': '',
+      'Comments': '',
+      'Bookmarks': '',
+      'Hits': '',
+      'Work ID': ''
+    };
+    const headers = Object.keys(emptyRow).join(',');
+    const blob = new Blob([headers], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, filename);
+    return;
+  }
+
   // Convert to CSV with headers
   const headers = Object.keys(exportData[0]).join(',');
-  const rows = exportData.map(row => 
-    Object.values(row).map(value => 
+  const rows = exportData.map(row =>
+    Object.values(row).map(value =>
       // Handle commas and quotes in CSV data
-      typeof value === 'string' && (value.includes(',') || value.includes('"')) 
-        ? `"${value.replace(/"/g, '""')}"` 
+      typeof value === 'string' && (value.includes(',') || value.includes('"'))
+        ? `"${value.replace(/"/g, '""')}"`
         : value
     ).join(',')
   );
-  
+
   const csvContent = [headers, ...rows].join('\n');
-  
+
   // Create blob and trigger download
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   saveAs(blob, filename);
