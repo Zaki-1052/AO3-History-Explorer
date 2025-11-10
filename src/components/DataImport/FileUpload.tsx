@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import { Card } from '../common/Card';
 import { Icon } from '../common/Icon';
 import { useData } from '../../context/DataContext';
+import { validateWorkData } from '../../utils/dataProcessing';
 
 export const FileUpload: React.FC = () => {
   const { setWorks, setIsLoading, setError } = useData();
@@ -21,12 +22,26 @@ export const FileUpload: React.FC = () => {
 
     reader.onload = (e) => {
       try {
-        const jsonData = JSON.parse(e.target?.result as string);
+        const result = e.target?.result;
+        if (typeof result !== 'string') {
+          throw new Error('Failed to read file content');
+        }
+
+        const jsonData = JSON.parse(result);
+
+        // Validate the structure of the imported data
+        if (!validateWorkData(jsonData)) {
+          throw new Error('Invalid data structure');
+        }
+
         setWorks(jsonData);
         setIsLoading(false);
       } catch (err) {
         console.error('Failed to parse JSON file:', err);
-        setError('Failed to parse JSON file. Please make sure it\'s a valid AO3 history JSON file.');
+        const errorMessage = err instanceof Error && err.message === 'Invalid data structure'
+          ? 'Invalid file format. Please make sure you\'re uploading a valid AO3 history JSON file exported from the AO3 History Exporter extension.'
+          : 'Failed to parse JSON file. Please make sure it\'s a valid JSON file.';
+        setError(errorMessage);
         setIsLoading(false);
       }
     };
