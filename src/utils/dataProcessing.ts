@@ -1,6 +1,73 @@
 // src/utils/dataProcessing.ts
 import { WorkData, SortConfig, FilterOptions, StatSummary, ChartData } from '../types/AO3Types';
 
+// Validate that imported data matches the WorkData structure
+export const validateWorkData = (data: unknown): data is WorkData[] => {
+  if (!Array.isArray(data)) {
+    return false;
+  }
+
+  // Check a sample of items for structure validation
+  // For large datasets, only validate first 10 items for performance
+  const sampleSize = Math.min(data.length, 10);
+
+  for (let i = 0; i < sampleSize; i++) {
+    const work = data[i];
+
+    // Check if work is an object
+    if (!work || typeof work !== 'object') {
+      return false;
+    }
+
+    // Check required top-level properties
+    if (
+      typeof work.id !== 'string' ||
+      typeof work.title !== 'string' ||
+      typeof work.author !== 'string' ||
+      !Array.isArray(work.fandoms) ||
+      typeof work.rating !== 'string' ||
+      typeof work.category !== 'string' ||
+      typeof work.completion !== 'string'
+    ) {
+      return false;
+    }
+
+    // Check nested tags structure
+    if (
+      !work.tags ||
+      typeof work.tags !== 'object' ||
+      !Array.isArray(work.tags.warnings) ||
+      !Array.isArray(work.tags.relationships) ||
+      !Array.isArray(work.tags.characters) ||
+      !Array.isArray(work.tags.freeforms)
+    ) {
+      return false;
+    }
+
+    // Check nested stats structure
+    if (
+      !work.stats ||
+      typeof work.stats !== 'object' ||
+      typeof work.stats.wordCount !== 'number' ||
+      typeof work.stats.kudos !== 'number'
+    ) {
+      return false;
+    }
+
+    // Check nested userStats structure
+    if (
+      !work.userStats ||
+      typeof work.userStats !== 'object' ||
+      typeof work.userStats.lastVisited !== 'string' ||
+      typeof work.userStats.visits !== 'number'
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
 // Detect deleted/unavailable works based on consistent patterns
 export const isDeletedWork = (work: WorkData): boolean => {
   return (
@@ -43,19 +110,23 @@ const parseDate = (dateString: string | undefined | null): Date => {
 };
 
 // Get nested property from an object using string path
-export const getNestedProperty = (obj: any, path: string): any => {
-  if (!obj) return undefined;
-  
+// Returns unknown to force type checking at call sites
+export const getNestedProperty = (obj: Record<string, any>, path: string): unknown => {
+  if (!obj || typeof obj !== 'object') return undefined;
+
   const parts = path.split('.');
-  let current = obj;
-  
+  let current: any = obj;
+
   for (const part of parts) {
     if (current === null || current === undefined) {
       return undefined;
     }
+    if (typeof current !== 'object') {
+      return undefined;
+    }
     current = current[part];
   }
-  
+
   return current;
 };
 
